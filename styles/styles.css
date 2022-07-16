@@ -1,0 +1,21 @@
+.mario {
+    background-image: url("https://i.pinimg.com/originals/bb/7f/fb/bb7ffbba483facaac98d15d1da923de8.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.div-container {
+    /* align-items: center; */
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    height: 600px;
+    width: 600px;
+
+}
+
+.div-container div{
+    border: 1px solid grey;
+    height: 10%;
+    width: 10%;
+  }
