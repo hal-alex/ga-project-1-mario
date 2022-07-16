@@ -21,10 +21,12 @@ function init () {
 
     function createDivGrid() {
         for (let i = 1; i <= numOfDivs; i++) {
-            console.log("hello")
             let div = document.createElement("div")
             div.id = i
-            if ()
+            if (terrainDivs.includes(i)) {
+                console.log(i)
+                div.classList.add(".ground")
+            }
             divContainer.appendChild(div)
             arrayOfDivs.push(div)
         }
@@ -33,13 +35,13 @@ function init () {
         
     }
 
-    function buildGround() {
-         arrayOfDivs.map(div => {
-            if (terrainDivs.includes(parseInt(div.id))) {
-                div.classList.add(".ground")
-            }
-         })
-    }
+    // function buildGround() {
+    //      arrayOfDivs.map(div => {
+    //         if (terrainDivs.includes(parseInt(div.id))) {
+    //             div.classList.add(".ground")
+    //         }
+    //      })
+    // }
 
     function addMario (position) {
         arrayOfDivs[position].classList.add(marioClass)
@@ -100,7 +102,7 @@ function init () {
 
 
     createDivGrid()
-    buildGround()
+    // buildGround()
 
     document.addEventListener("keydown", marioMovement)
 
