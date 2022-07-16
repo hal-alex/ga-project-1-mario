@@ -6,6 +6,7 @@ function init () {
     let numOfDivs = numOfRows * numOfCols
 
     let arrayOfDivs = []
+    let terrainDivs = [28, 29, 30, 31, 32, 33, 34]
 
     let startingPosition = 11
     let currentPosition = startingPosition
@@ -23,12 +24,21 @@ function init () {
             console.log("hello")
             let div = document.createElement("div")
             div.id = i
+            if ()
             divContainer.appendChild(div)
             arrayOfDivs.push(div)
         }
         
         addMario(startingPosition)
         
+    }
+
+    function buildGround() {
+         arrayOfDivs.map(div => {
+            if (terrainDivs.includes(parseInt(div.id))) {
+                div.classList.add(".ground")
+            }
+         })
     }
 
     function addMario (position) {
@@ -39,6 +49,12 @@ function init () {
         divContainer.remove()
     }
 
+
+    function removeMario(position){
+        arrayOfDivs[position].classList.remove(marioClass)
+      }
+
+    
     function marioMovement(event) {
     // Save the keys for each direction
         const keyCode = event.keyCode
@@ -49,6 +65,8 @@ function init () {
 
         // // Remove cat from current position
         // removeCat(currentPosition)
+
+        removeMario(currentPosition)
 
         // Check the keyCode on the event and match with the direction
         if(up === keyCode) {
@@ -82,10 +100,13 @@ function init () {
 
 
     createDivGrid()
+    buildGround()
 
     document.addEventListener("keydown", marioMovement)
 
     deleteBut.addEventListener("click", deleteDivContainer)
+
+
 
 
 }

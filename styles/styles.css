@@ -4,6 +4,12 @@
     background-size: contain;
 }
 
+.ground {
+    background-image: url("https://art.pixilart.com/443d1dd72cf1b89.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
 .div-container {
     /* align-items: center; */
     justify-content: center;
@@ -14,8 +20,10 @@
 
 }
 
+
 .div-container div{
     border: 1px solid grey;
     height: 10%;
     width: 10%;
   }
+
