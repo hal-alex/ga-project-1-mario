@@ -1,16 +1,25 @@
 function init () {
 
+    //Elements
+
     //Rows and number of divs - map size can be changed by changing the numOfRows
     let numOfRows = 10
     let numOfCols = 10
     let numOfDivs = numOfRows * numOfCols
 
+    // Array of divs is a total number of divs in the grid, these divs contain classes, which are linked to CSS
     let arrayOfDivs = []
+
+    // terrainDivs is an array containing the numbers that represent divs that have .ground
     let terrainDivs = [37, 38, 39, 40, 41, 42, 43, 90, 89, 88, 87, 86, 85, 84]
-    let enemyDivs = [33]
+
+    // pointsBlockDivs is an array containing the numbers that represent divs that have .points 
     let pointsBlockDivs = [13]
 
+    // this is Mario's starting position
     let startingPosition = 28
+
+    // we update Mario's position as he moves 
     let currentPosition = startingPosition
 
     let startButton = document.querySelector(".startbutton")
@@ -21,12 +30,16 @@ function init () {
 
     let marioClass = "mario"
 
+    // Object containing starting positions of Goombas (enemies) 
     let goombaLocations = {
         goomba1: 33, 
         goomba2: 76, 
         goomba3: 80,
     }
+    
+    //Execution
 
+    // This function generates the Goombas in the initial position (taken from goombaLocations)
     function generateGoombas () {
         let arrayFromGLocations = Object.keys(goombaLocations).map(function(key) { return goombaLocations[key]})
         for (let i in arrayOfDivs) {
@@ -35,21 +48,34 @@ function init () {
         }
     }
 
+    // This function generates -1 or 1 to give Goombas horizontal movement 
     function generateRandomMovements() {
         return Math.random() < 0.5 ? -1 : 1
     }
 
+    // This function assigns Goombas new coordinates where to go and replaces the arrayOfDivs with updates divs
     function randomEnemyMovement () {
         setInterval(() => {
             // for (let enemy in goombaLocations) {
             //     let newGLocation = goombaLocations[enemy] + generateRandomMovements()
             //     goombaLocations[enemy] = newGLocation 
             //     console.log(goombaLocations[enemy])
+            let selectedDivs = document.querySelectorAll(".goomba")
+            console.log(selectedDivs.length)
+            for (let i = 0; i < selectedDivs.length; i++) {
+                let newCoordinate = parseFloat(selectedDivs[i].id) + generateRandomMovements()
 
-            let newLocations = document.querySelectorAll(".goomba").forEach(enemyG => {
-                return parseFloat(enemyG.id) + generateRandomMovements()
-            })
-            console.log(newLocations)
+            }
+
+            // let newArray = Array.from(selectedDivs).forEach(item => {
+            //     return item.id
+            // })
+            // console.log(newArray)
+
+            // let newLocations = selectedDivs.forEach(enemyG => {
+            //     return parseFloat(enemyG.id) + generateRandomMovements()
+            // })
+            // console.log(newLocations)
             // for (let enemyG in ) {
             //     console.log(enemyG)
             // }
@@ -62,6 +88,7 @@ function init () {
     //     }, 2000);
     }
 
+    // This function creates the grid full of divs, assigns classes to some divs that match the criteria of being in another array
     function createDivGrid() {
         for (let i = 1; i <= numOfDivs; i++) {
             let div = document.createElement("div")
@@ -80,25 +107,22 @@ function init () {
         
     }
 
-    function buildGround() {
-        document.getElementById("20").classList.add("points-block")
-        // document.querySelector("#20").classList.add("points-block")
-    }
-
+    // This function takes marioClass and assigns it to a div at a certain location
     function addMario (position) {
         arrayOfDivs[position].classList.add(marioClass)
     }
 
+    // This deletes the div grid - used for testing purposes 
     function deleteDivContainer () {
         divContainer.remove()
     }
 
-
+    // This function removes marioClass from a div at a specific location
     function removeMario(position){
         arrayOfDivs[position].classList.remove(marioClass)
       }
 
-    
+    // This function controls the movement of Mario 
     function marioMovement(event) {
     // Save the keys for each direction
         const keyCode = event.keyCode
@@ -134,23 +158,17 @@ function init () {
 
     }
 
-    //Elements
-
-    //Execution
 
     //Events
 
-    //Create div grid
-
-    
     createDivGrid()
-    
-    startButton.addEventListener("click", buildGround)
 
     document.addEventListener("keydown", marioMovement)
 
     deleteBut.addEventListener("click", deleteDivContainer)
+
     randomEnemyMovement ()
+
     generateGoombas()
 
 }
