@@ -10,6 +10,19 @@
     background-size: contain;
 }
 
+.goomba {
+    background-image: url("https://toppng.com/uploads/preview/oomba-8-bit-goomba-11562923680chnjskwjpc.png");
+    /* background-image: url("https://static.wikia.nocookie.net/stabyourself/images/7/71/Anigoomba.gif/revision/latest/top-crop/width/360/height/360?cb=20150107031425"); */
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.points-block {
+    background-image: url("http://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/bb9132fd5d4af2a.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
 .div-container {
     /* align-items: center; */
     justify-content: center;

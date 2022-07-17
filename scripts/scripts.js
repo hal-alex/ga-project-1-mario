@@ -6,9 +6,11 @@ function init () {
     let numOfDivs = numOfRows * numOfCols
 
     let arrayOfDivs = []
-    let terrainDivs = [28, 29, 30, 31, 32, 33, 34]
+    let terrainDivs = [37, 38, 39, 40, 41, 42, 43, 90, 89, 88, 87, 86, 85, 84]
+    let enemyDivs = [33]
+    let pointsBlockDivs = [13]
 
-    let startingPosition = 11
+    let startingPosition = 28
     let currentPosition = startingPosition
 
     let startButton = document.querySelector(".startbutton")
@@ -19,13 +21,56 @@ function init () {
 
     let marioClass = "mario"
 
+    let goombaLocations = {
+        goomba1: 33, 
+        goomba2: 76, 
+        goomba3: 80,
+    }
+
+    function generateGoombas () {
+        let arrayFromGLocations = Object.keys(goombaLocations).map(function(key) { return goombaLocations[key]})
+        for (let i in arrayOfDivs) {
+            if (arrayFromGLocations.includes(parseFloat(arrayOfDivs[i].id)))
+            arrayOfDivs[i].classList.add("goomba")
+        }
+    }
+
+    function generateRandomMovements() {
+        return Math.random() < 0.5 ? -1 : 1
+    }
+
+    function randomEnemyMovement () {
+        setInterval(() => {
+            // for (let enemy in goombaLocations) {
+            //     let newGLocation = goombaLocations[enemy] + generateRandomMovements()
+            //     goombaLocations[enemy] = newGLocation 
+            //     console.log(goombaLocations[enemy])
+
+            let newLocations = document.querySelectorAll(".goomba").forEach(enemyG => {
+                return parseFloat(enemyG.id) + generateRandomMovements()
+            })
+            console.log(newLocations)
+            // for (let enemyG in ) {
+            //     console.log(enemyG)
+            // }
+
+        }, 2000)
+
+    //     let location = parseFloat(document.querySelector(".goomba").id)+randomInt
+    //     setInterval(() => {
+    //         document.getElementById(`${location}`).classList.add("goomba")
+    //     }, 2000);
+    }
+
     function createDivGrid() {
         for (let i = 1; i <= numOfDivs; i++) {
             let div = document.createElement("div")
             div.id = i
             if (terrainDivs.includes(i)) {
-                console.log(i)
-                div.classList.add(".ground")
+                div.classList.add("ground")
+            }
+            if (pointsBlockDivs.includes(i)) {
+                div.classList.add("points-block")
             }
             divContainer.appendChild(div)
             arrayOfDivs.push(div)
@@ -35,13 +80,10 @@ function init () {
         
     }
 
-    // function buildGround() {
-    //      arrayOfDivs.map(div => {
-    //         if (terrainDivs.includes(parseInt(div.id))) {
-    //             div.classList.add(".ground")
-    //         }
-    //      })
-    // }
+    function buildGround() {
+        document.getElementById("20").classList.add("points-block")
+        // document.querySelector("#20").classList.add("points-block")
+    }
 
     function addMario (position) {
         arrayOfDivs[position].classList.add(marioClass)
@@ -65,21 +107,21 @@ function init () {
         const left = 37
         const right = 39
 
-        // // Remove cat from current position
-        // removeCat(currentPosition)
-
         removeMario(currentPosition)
 
         // Check the keyCode on the event and match with the direction
         if(up === keyCode) {
             console.log("ARROW UP")
             currentPosition -= numOfRows-1
-        } else if (down === keyCode){
+        } else if (down === keyCode && 
+            !document.getElementById(`${currentPosition + numOfRows}`).classList.contains("ground")){
             console.log("ARROW DOWN")
             currentPosition += numOfRows-1
+            console.log(currentPosition)
+
+                
         } else if (left === keyCode){
             console.log("ARROW LEFT")
-            console.log(currentPosition % numOfRows)
             currentPosition -= 1
         } else if (right === keyCode){
             console.log("ARROW RIGHT")
@@ -100,16 +142,16 @@ function init () {
 
     //Create div grid
 
-
+    
     createDivGrid()
-    // buildGround()
+    
+    startButton.addEventListener("click", buildGround)
 
     document.addEventListener("keydown", marioMovement)
 
     deleteBut.addEventListener("click", deleteDivContainer)
-
-
-
+    randomEnemyMovement ()
+    generateGoombas()
 
 }
 
