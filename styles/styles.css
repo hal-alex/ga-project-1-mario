@@ -1,5 +1,15 @@
+* {
+    box-sizing: border-box;
+}
+
 .mario {
     background-image: url("https://i.pinimg.com/originals/bb/7f/fb/bb7ffbba483facaac98d15d1da923de8.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.mario-jump {
+    background-image: url("https://www.pngitem.com/pimgs/m/3-36696_mario-8-bit-jumping-hd-png-download.png");
     background-repeat: no-repeat;
     background-size: contain;
 }

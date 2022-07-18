@@ -11,13 +11,13 @@ function init () {
     let arrayOfDivs = []
 
     // terrainDivs is an array containing the numbers that represent divs that have .ground
-    let terrainDivs = [37, 38, 39, 40, 41, 42, 43, 90, 89, 88, 87, 86, 85, 84]
+    let terrainDivs = [40, 41, 42, 43, 44, 45, 46, 89, 88, 87, 86, 85, 84, 83]
 
     // pointsBlockDivs is an array containing the numbers that represent divs that have .points 
     let pointsBlockDivs = [13]
 
     // this is Mario's starting position
-    let startingPosition = 28
+    let startingPosition = 31
 
     // we update Mario's position as he moves 
     let currentPosition = startingPosition
@@ -29,21 +29,19 @@ function init () {
     let divContainer = document.querySelector(".div-container")
 
     let marioClass = "mario"
+    let marioJump = "mario-jump"
+    let amountOfLives = 4
 
-    // Object containing starting positions of Goombas (enemies) 
-    let goombaLocations = {
-        goomba1: 33, 
-        goomba2: 76, 
-        goomba3: 80,
-    }
-    
+    // Array containing starting positions of Goombas (enemies) 
+    let goombaLocations = [33, 74, 78]
+
     //Execution
 
     // This function generates the Goombas in the initial position (taken from goombaLocations)
     function generateGoombas () {
-        let arrayFromGLocations = Object.keys(goombaLocations).map(function(key) { return goombaLocations[key]})
+        
         for (let i in arrayOfDivs) {
-            if (arrayFromGLocations.includes(parseFloat(arrayOfDivs[i].id)))
+            if (goombaLocations.includes(parseFloat(arrayOfDivs[i].id)))
             arrayOfDivs[i].classList.add("goomba")
         }
     }
@@ -53,43 +51,62 @@ function init () {
         return Math.random() < 0.5 ? -1 : 1
     }
 
-    // This function assigns Goombas new coordinates where to go and replaces the arrayOfDivs with updates divs
-    function randomEnemyMovement () {
-        setInterval(() => {
-            // for (let enemy in goombaLocations) {
-            //     let newGLocation = goombaLocations[enemy] + generateRandomMovements()
-            //     goombaLocations[enemy] = newGLocation 
-            //     console.log(goombaLocations[enemy])
-            let selectedDivs = document.querySelectorAll(".goomba")
-            console.log(selectedDivs.length)
-            for (let i = 0; i < selectedDivs.length; i++) {
-                let newCoordinate = parseFloat(selectedDivs[i].id) + generateRandomMovements()
-            }
-
-            // let newArray = Array.from(selectedDivs).forEach(item => {
-            //     return item.id
-            // })
-            // console.log(newArray)
-
-            // let newLocations = selectedDivs.forEach(enemyG => {
-            //     return parseFloat(enemyG.id) + generateRandomMovements()
-            // })
-            // console.log(newLocations)
-            // for (let enemyG in ) {
-            //     console.log(enemyG)
-            // }
-
-        }, 2000)
-
-    //     let location = parseFloat(document.querySelector(".goomba").id)+randomInt
+    //This function assigns Goombas new coordinates where to go and replaces the arrayOfDivs with updates divs
+    // function randomEnemyMovement () {
     //     setInterval(() => {
-    //         document.getElementById(`${location}`).classList.add("goomba")
-    //     }, 2000);
+    //         let selectedDivs = document.querySelectorAll(".goomba")
+    //         console.log(selectedDivs)
+    //         for (let i = 0; i <= selectedDivs.length; i++) {
+    //             let randomNum = generateRandomMovements()
+    //             console.log("This is the random num =>", randomNum)
+    //             let newCoordinate = parseInt(selectedDivs[i].id) 
+    //             console.log("This is the new coordinate =>", newCoordinate)
+    //             // This checks if the new position is on top of the ground class
+    //             // console.log("Is new block above ground", arrayOfDivs[newCoordinate + numOfRows].classList.contains("ground"))
+    //             // console.log("Block below new coord", newCoordinate + numOfRows)
+    //             if (arrayOfDivs[newCoordinate + numOfRows].classList.contains("ground")) {
+    //                 // In this statement, also check if this is going off the grid
+    //                 selectedDivs[i].classList.remove("goomba")
+    //                 arrayOfDivs[newCoordinate].classList.add("goomba")
+    //             }} 
+    //     }, 2000)
+    // }
+
+    function marioGetHit() {
+        if (amountOfLives === 0) {
+            console.log("game over")
+        } else if (amountOfLives > 0) {
+            amountOfLives -= 1
+            console.log(amountOfLives)
+        }
+    }
+
+    function moveEnemies() {
+        setInterval(() => {
+            let goombaArray = document.querySelectorAll(".goomba")
+            console.log(goombaArray)
+            let randomNumber = generateRandomMovements()
+            for (let i = 0; i < goombaArray.length; i++) {
+                let updatedLocation = parseInt(goombaArray[i].id) + randomNumber
+                if (arrayOfDivs[updatedLocation + numOfRows].classList.contains("ground")) {
+                    if (!arrayOfDivs[updatedLocation +1 ].classList.contains("goomba") 
+                    || !arrayOfDivs[updatedLocation - 1].classList.contains("goomba")) {
+                        if (arrayOfDivs[updatedLocation].classList.contains("mario")) {
+                            console.log("hit")
+                            marioGetHit()
+                        }
+                        goombaArray[i].classList.remove("goomba")
+                        arrayOfDivs[updatedLocation].classList.add("goomba")
+
+                    }
+                }
+            }
+        }, 2000)
     }
 
     // This function creates the grid full of divs, assigns classes to some divs that match the criteria of being in another array
     function createDivGrid() {
-        for (let i = 1; i <= numOfDivs; i++) {
+        for (let i = 0; i <= numOfDivs; i++) {
             let div = document.createElement("div")
             div.id = i
             if (terrainDivs.includes(i)) {
@@ -102,7 +119,7 @@ function init () {
             arrayOfDivs.push(div)
         }
         
-        addMario(startingPosition)
+        addMario(startingPosition, marioClass)
         
     }
 
@@ -135,11 +152,13 @@ function init () {
         // Check the keyCode on the event and match with the direction
         if(up === keyCode) {
             console.log("ARROW UP")
-            currentPosition -= numOfRows-1
+            currentPosition -= numOfRows
+            // addMario(currentPosition, marioJump)
+            
         } else if (down === keyCode && 
             !document.getElementById(`${currentPosition + numOfRows}`).classList.contains("ground")){
             console.log("ARROW DOWN")
-            currentPosition += numOfRows-1
+            currentPosition += numOfRows
             console.log(currentPosition)
 
                 
@@ -166,7 +185,7 @@ function init () {
 
     deleteBut.addEventListener("click", deleteDivContainer)
 
-    randomEnemyMovement ()
+    moveEnemies()
 
     generateGoombas()
 
