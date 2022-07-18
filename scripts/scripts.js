@@ -84,7 +84,6 @@ function init () {
     function moveEnemies() {
         setInterval(() => {
             let goombaArray = document.querySelectorAll(".goomba")
-            console.log(goombaArray)
             let randomNumber = generateRandomMovements()
             for (let i = 0; i < goombaArray.length; i++) {
                 let updatedLocation = parseInt(goombaArray[i].id) + randomNumber
@@ -101,7 +100,23 @@ function init () {
                     }
                 }
             }
-        }, 2000)
+        }, 1000)
+    }
+
+    function checkCollisionTop(keyCode) {
+        let goombaArray2 = Array.from(document.querySelectorAll(".goomba")) 
+        for (let e in goombaArray2) {
+            if (parseInt(goombaArray2[e].id) - numOfRows  === currentPosition) {
+                if (goombaArray2[e].id -  numOfRows == currentPosition) {
+                    console.log("squash")
+                }
+            }
+        }
+            
+    }
+
+    function marioGravity () {
+        
     }
 
     // This function creates the grid full of divs, assigns classes to some divs that match the criteria of being in another array
@@ -159,7 +174,6 @@ function init () {
             !document.getElementById(`${currentPosition + numOfRows}`).classList.contains("ground")){
             console.log("ARROW DOWN")
             currentPosition += numOfRows
-            console.log(currentPosition)
 
                 
         } else if (left === keyCode){
@@ -173,7 +187,7 @@ function init () {
         }
 
         addMario(currentPosition)
-
+        checkCollisionTop(keyCode)
     }
 
 
