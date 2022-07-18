@@ -64,7 +64,6 @@ function init () {
             console.log(selectedDivs.length)
             for (let i = 0; i < selectedDivs.length; i++) {
                 let newCoordinate = parseFloat(selectedDivs[i].id) + generateRandomMovements()
-
             }
 
             // let newArray = Array.from(selectedDivs).forEach(item => {
