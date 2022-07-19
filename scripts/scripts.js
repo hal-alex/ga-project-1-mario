@@ -117,12 +117,22 @@ function init () {
 
     // This function makes Mario go down by one row until "ground" is below him 
     function marioGravity () {
-        while(!arrayOfDivs[currentPosition + numOfRows].classList.contains("ground")) {
-            setTimeout(() => {
-                removeMario(currentPosition)
-                addMario(currentPosition + numOfRows)
-            }, 2000);
-        }
+        // while(!arrayOfDivs[currentPosition + numOfRows].classList.contains("ground")) {
+        //     setTimeout(() => {
+        //         removeMario(currentPosition)
+        //         addMario(currentPosition + numOfRows)
+        //     }, 2000);
+        // }
+
+        let gravityInterval = setInterval(() => {
+            if (!arrayOfDivs[currentPosition + numOfRows].classList.contains("ground")) {
+                removeMario(currentPosition + numOfRows)
+                addMario(currentPosition)
+            } else {
+                clearInterval(gravityInterval)
+            }
+        }, 2000);
+
 
         
         
