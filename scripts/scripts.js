@@ -100,7 +100,7 @@ function init () {
                     }
                 }
             }
-        }, 1000)
+        }, 20000)
     }
 
     function checkCollisionTop(keyCode) {
@@ -115,8 +115,25 @@ function init () {
             
     }
 
+    // This function makes Mario go down by one row until "ground" is below him 
     function marioGravity () {
+        while(!arrayOfDivs[currentPosition + numOfRows].classList.contains("ground")) {
+            setTimeout(() => {
+                removeMario(currentPosition)
+                addMario(currentPosition + numOfRows)
+            }, 2000);
+        }
+
         
+        
+        // while (!arrayOfDivs[currentPosition + numOfRows].classList.contains("ground")) {
+        //     console.log("Inside while loop", currentPosition)
+        //     removeMario(currentPosition)
+        //     currentPosition += numOfRows
+        //     addMario(currentPosition)
+           
+        
+
     }
 
     // This function creates the grid full of divs, assigns classes to some divs that match the criteria of being in another array
@@ -168,26 +185,31 @@ function init () {
         if(up === keyCode) {
             console.log("ARROW UP")
             currentPosition -= numOfRows
+            addMario(currentPosition)
+            marioGravity()
             // addMario(currentPosition, marioJump)
             
         } else if (down === keyCode && 
             !document.getElementById(`${currentPosition + numOfRows}`).classList.contains("ground")){
             console.log("ARROW DOWN")
             currentPosition += numOfRows
-
+            marioGravity ()
+            addMario(currentPosition)
+            checkCollisionTop(keyCode) 
                 
         } else if (left === keyCode){
             console.log("ARROW LEFT")
             currentPosition -= 1
+            addMario(currentPosition)
         } else if (right === keyCode){
             console.log("ARROW RIGHT")
             currentPosition += 1
+            addMario(currentPosition)
         } else {
             console.log("ACTION NOT FOUND")
         }
 
-        addMario(currentPosition)
-        checkCollisionTop(keyCode)
+        
     }
 
 
