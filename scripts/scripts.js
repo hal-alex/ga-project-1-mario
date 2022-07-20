@@ -35,6 +35,10 @@ function init () {
     // Array containing starting positions of Goombas (enemies) 
     let goombaLocations = [33, 74, 78]
 
+    // This makes the gravityInterval variable global and can be reassigned when the interval is initiated
+
+    let gravityInterval
+
     //Execution
 
     // This function generates the Goombas in the initial position (taken from goombaLocations)
@@ -51,27 +55,7 @@ function init () {
         return Math.random() < 0.5 ? -1 : 1
     }
 
-    //This function assigns Goombas new coordinates where to go and replaces the arrayOfDivs with updates divs
-    // function randomEnemyMovement () {
-    //     setInterval(() => {
-    //         let selectedDivs = document.querySelectorAll(".goomba")
-    //         console.log(selectedDivs)
-    //         for (let i = 0; i <= selectedDivs.length; i++) {
-    //             let randomNum = generateRandomMovements()
-    //             console.log("This is the random num =>", randomNum)
-    //             let newCoordinate = parseInt(selectedDivs[i].id) 
-    //             console.log("This is the new coordinate =>", newCoordinate)
-    //             // This checks if the new position is on top of the ground class
-    //             // console.log("Is new block above ground", arrayOfDivs[newCoordinate + numOfRows].classList.contains("ground"))
-    //             // console.log("Block below new coord", newCoordinate + numOfRows)
-    //             if (arrayOfDivs[newCoordinate + numOfRows].classList.contains("ground")) {
-    //                 // In this statement, also check if this is going off the grid
-    //                 selectedDivs[i].classList.remove("goomba")
-    //                 arrayOfDivs[newCoordinate].classList.add("goomba")
-    //             }} 
-    //     }, 2000)
-    // }
-
+    // This function checks for the amount of lives left, if lives are 0, then game is over
     function marioGetHit() {
         if (amountOfLives === 0) {
             console.log("game over")
@@ -81,6 +65,7 @@ function init () {
         }
     }
 
+    // This function loops through all the goombas, assigns them random movement points and checks if another Goomba class is in that div. It also checks if Mario is in that div, if so, it removes a life 
     function moveEnemies() {
         setInterval(() => {
             let goombaArray = document.querySelectorAll(".goomba")
@@ -103,28 +88,21 @@ function init () {
         }, 2000)
     }
 
+    // This function checks if Mario is on top of a Goomba 
     function checkCollisionTop() {
         let goombaArray2 = Array.from(document.querySelectorAll(".goomba")) 
         for (let e in goombaArray2) {
             if (parseInt(goombaArray2[e].id) - numOfRows  === currentPosition) {
-                if (goombaArray2[e].id -  numOfRows == currentPosition) {
-                    console.log("squash")
-                }
+                console.log("squash")
             }
         }
-            
     }
 
     // This function makes Mario go down by one row until "ground" is below him 
     function marioGravity () {
-        // while(!arrayOfDivs[currentPosition + numOfRows].classList.contains("ground")) {
-        //     setTimeout(() => {
-        //         removeMario(currentPosition)
-        //         addMario(currentPosition + numOfRows)
-        //     }, 2000);
-        // }
+        clearInterval(gravityInterval)
         
-        let gravityInterval = setInterval(() => {
+        gravityInterval = setInterval(() => {
             if (!arrayOfDivs[currentPosition + numOfRows].classList.contains("ground")) {
                 removeMario(currentPosition)
                 currentPosition += numOfRows
@@ -135,16 +113,8 @@ function init () {
                 checkCollisionTop()
                 clearInterval(gravityInterval)
             }
-        }, 2000);
-        
-        // while (!arrayOfDivs[currentPosition + numOfRows].classList.contains("ground")) {
-        //     console.log("Inside while loop", currentPosition)
-        //     removeMario(currentPosition)
-        //     currentPosition += numOfRows
-        //     addMario(currentPosition)
-           
-        
-
+        }, 1000);
+    
     }
 
     // This function creates the grid full of divs, assigns classes to some divs that match the criteria of being in another array
@@ -198,6 +168,7 @@ function init () {
             currentPosition -= numOfRows
             addMario(currentPosition)
             marioGravity()
+            checkCollisionTop() 
             // addMario(currentPosition, marioJump)
             
         } else if (down === keyCode && 
@@ -206,18 +177,20 @@ function init () {
             currentPosition += numOfRows
             marioGravity ()
             addMario(currentPosition)
-            checkCollisionTop(keyCode) 
+            checkCollisionTop() 
                 
         } else if (left === keyCode){
             console.log("ARROW LEFT")
             currentPosition -= 1
             addMario(currentPosition)
             marioGravity ()
+            checkCollisionTop() 
         } else if (right === keyCode){
             console.log("ARROW RIGHT")
             currentPosition += 1
             addMario(currentPosition)
             marioGravity ()
+            checkCollisionTop() 
         } else {
             console.log("ACTION NOT FOUND")
         }
