@@ -11,10 +11,10 @@ function init () {
     let arrayOfDivs = []
 
     // terrainDivs is an array containing the numbers that represent divs that have .ground
-    let terrainDivs = [40, 41, 42, 43, 44, 45, 46, 89, 88, 87, 86, 85, 84, 83]
+    let terrainDivs = [40, 41, 42, 43, 44, 45, 46, 99, 98, 97, 96, 95, 94, 93]
 
     // pointsBlockDivs is an array containing the numbers that represent divs that have .points 
-    let pointsBlockDivs = [13]
+    let pointsBlockDivs = [13, 63, 65, ]
 
     // this is Mario's starting position
     let startingPosition = 31
@@ -31,9 +31,10 @@ function init () {
     let marioClass = "mario"
     let marioJump = "mario-jump"
     let amountOfLives = 4
-
+    let score = 0
+    let scoreSpan = document.getElementById("scorespan")
     // Array containing starting positions of Goombas (enemies) 
-    let goombaLocations = [33, 74, 78]
+    let goombaLocations = [35, 84, 88]
 
     // This makes the gravityInterval variable global and can be reassigned when the interval is initiated
 
@@ -57,6 +58,9 @@ function init () {
 
     // This function checks for the amount of lives left, if lives are 0, then game is over
     function marioGetHit() {
+        removeMario(currentPosition)
+        currentPosition = startingPosition
+        addMario(startingPosition)
         if (amountOfLives === 0) {
             console.log("game over")
         } else if (amountOfLives > 0) {
@@ -81,7 +85,6 @@ function init () {
                         }
                         goombaArray[i].classList.remove("goomba")
                         arrayOfDivs[updatedLocation].classList.add("goomba")
-
                     }
                 }
             }
@@ -93,7 +96,29 @@ function init () {
         let goombaArray2 = Array.from(document.querySelectorAll(".goomba")) 
         for (let e in goombaArray2) {
             if (parseInt(goombaArray2[e].id) - numOfRows  === currentPosition) {
-                console.log("squash")
+                arrayOfDivs[goombaArray2[e].id].classList.remove("goomba")
+                score += 200
+                scoreSpan.innerHTML = score
+            }
+        }
+    }
+
+    // This function loops through the points blocks and checks if Mario has hit them 
+    function scorePoints () {
+        let pointsArray = Array.from(document.querySelectorAll(".points-block")) 
+        for (let i in pointsArray) {
+            if (parseInt(pointsArray[i].id) === currentPosition) {
+                console.log("block hit")
+                console.log(arrayOfDivs[pointsArray[i].id].classList)
+
+                setTimeout(() => {
+                    arrayOfDivs[pointsArray[i].id - numOfRows].classList.remove("coin-spinning")
+                }, 1500);
+                score += 100
+                scoreSpan.innerHTML = score
+                arrayOfDivs[pointsArray[i].id - numOfRows].classList.add("coin-spinning")
+                arrayOfDivs[pointsArray[i].id].classList.remove("points-block")
+                arrayOfDivs[pointsArray[i].id].classList.add("empty-points-block")
             }
         }
     }
@@ -113,7 +138,7 @@ function init () {
                 checkCollisionTop()
                 clearInterval(gravityInterval)
             }
-        }, 1000);
+        }, 250);
     
     }
 
@@ -182,19 +207,25 @@ function init () {
         } else if (left === keyCode){
             console.log("ARROW LEFT")
             currentPosition -= 1
+            if (arrayOfDivs[currentPosition].classList.contains("goomba")) {
+                marioGetHit()
+            }
             addMario(currentPosition)
             marioGravity ()
             checkCollisionTop() 
         } else if (right === keyCode){
             console.log("ARROW RIGHT")
             currentPosition += 1
+            if (arrayOfDivs[currentPosition].classList.contains("goomba")) {
+                marioGetHit()
+            }
             addMario(currentPosition)
             marioGravity ()
             checkCollisionTop() 
         } else {
             console.log("ACTION NOT FOUND")
         }
-
+        scorePoints ()
         
     }
 

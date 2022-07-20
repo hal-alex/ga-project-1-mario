@@ -33,6 +33,20 @@
     background-size: contain;
 }
 
+.empty-points-block {
+    background-image: url("../assets/empty_block.PNG");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.coin-spinning {
+    background-image: url("../assets/coin_spinning.webp");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 75%;
+}
+
+
 .div-container {
     /* align-items: center; */
     justify-content: center;
