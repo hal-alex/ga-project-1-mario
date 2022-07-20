@@ -100,10 +100,10 @@ function init () {
                     }
                 }
             }
-        }, 20000)
+        }, 2000)
     }
 
-    function checkCollisionTop(keyCode) {
+    function checkCollisionTop() {
         let goombaArray2 = Array.from(document.querySelectorAll(".goomba")) 
         for (let e in goombaArray2) {
             if (parseInt(goombaArray2[e].id) - numOfRows  === currentPosition) {
@@ -123,18 +123,19 @@ function init () {
         //         addMario(currentPosition + numOfRows)
         //     }, 2000);
         // }
-
+        
         let gravityInterval = setInterval(() => {
             if (!arrayOfDivs[currentPosition + numOfRows].classList.contains("ground")) {
-                removeMario(currentPosition + numOfRows)
+                removeMario(currentPosition)
+                currentPosition += numOfRows
+                checkCollisionTop()
                 addMario(currentPosition)
             } else {
+                console.log("ground below")
+                checkCollisionTop()
                 clearInterval(gravityInterval)
             }
         }, 2000);
-
-
-        
         
         // while (!arrayOfDivs[currentPosition + numOfRows].classList.contains("ground")) {
         //     console.log("Inside while loop", currentPosition)
@@ -211,10 +212,12 @@ function init () {
             console.log("ARROW LEFT")
             currentPosition -= 1
             addMario(currentPosition)
+            marioGravity ()
         } else if (right === keyCode){
             console.log("ARROW RIGHT")
             currentPosition += 1
             addMario(currentPosition)
+            marioGravity ()
         } else {
             console.log("ACTION NOT FOUND")
         }
