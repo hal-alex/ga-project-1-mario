@@ -1,23 +1,45 @@
 function init () {
 
+    // To do list
+    // Start button - link the functions to the start button so everything starts working when start is licked
+    // Restart button - link it to the functions and reset the variables to default values
+    // Map 
+    // Add "win" box 
+    // Controls 
+    // Arrow down - Prevent Mario dissapearing when arrow down is engaged 
+    // Arrow left - prevent Mario going off the edge of the map
+    // Arrow right - prevent Mario going off the edge of the map
+    // Arrow up - prevent Mario going off the top of the map or into the ground blocks
+    // Sound 
+    // Start theme music when the start button is clicked
+    // Add jumping music when jump is pressed
+    // Add points music when a point is scored
+    // Add "lost a life" clip when he loses a life 
+    // Add winning music when the game is over
+    // Restart button - theme music restarts 
+    // Goombas - replace them with animations
+    // Download all the images to local 
+    // Lives - implement repeat inside the span 
+    // When game ends, bring up a popup and offer the user to try again 
+
     //Elements
 
     //Rows and number of divs - map size can be changed by changing the numOfRows
-    let numOfRows = 10
-    let numOfCols = 10
+    let numOfRows = 15
+    let numOfCols = 15
     let numOfDivs = numOfRows * numOfCols
 
     // Array of divs is a total number of divs in the grid, these divs contain classes, which are linked to CSS
     let arrayOfDivs = []
 
     // terrainDivs is an array containing the numbers that represent divs that have .ground
-    let terrainDivs = [40, 41, 42, 43, 44, 45, 46, 99, 98, 97, 96, 95, 94, 93]
+    let terrainDivs = [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 149, 148, 147, 146, 145, 144, 143, 142, 141, 140, 139, 138, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224 ]
 
     // pointsBlockDivs is an array containing the numbers that represent divs that have .points 
-    let pointsBlockDivs = [13, 63, 65, ]
+    let pointsBlockDivs = [18, 23, 91, 95, 99, 179, 173, 168]
 
     // this is Mario's starting position
-    let startingPosition = 31
+    let startingPosition = 46
     // when Mario ends in this position, then he "wins" the game
     let winningPosition = 80
 
@@ -26,18 +48,18 @@ function init () {
 
     let startButton = document.querySelector(".startbutton")
     
-    let deleteBut = document.querySelector(".delete")
-
     let divContainer = document.querySelector(".div-container")
+
+    let livesSpan = document.getElementById("life-hearts")
 
     let marioClass = "mario"
     let marioJump = "jump"
     let marioLeft = "left"
     let amountOfLives = 4
     let score = 0
-    let scoreSpan = document.getElementById("scorespan")
+    let scoreSpan = document.getElementById("score-span")
     // Array containing starting positions of Goombas (enemies) 
-    let goombaLocations = [35, 84, 88]
+    let goombaLocations = [52, 49, 125, 129, 133, 197, 200, 203, 206   ]
 
     // This makes the gravityInterval variable global and can be reassigned when the interval is initiated
 
@@ -243,8 +265,6 @@ function init () {
     createDivGrid()
 
     document.addEventListener("keydown", marioMovement)
-
-    deleteBut.addEventListener("click", deleteDivContainer)
 
     moveEnemies()
 

@@ -1,5 +1,11 @@
 * {
     box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+    display: flex;
+    justify-content: center
 }
 
 .mario {
@@ -58,13 +64,14 @@
     flex-wrap: wrap;
     height: 800px;
     width: 800px;
+    border: 1px solid black;
 
 }
 
 .div-container div{
-    border: 0.5px solid white;
-    height: 10%;
-    width: 10%;
+    border: 0.5px solid gray;
+    height: 53px;
+    width: 53px;
   }
 
   .winning-block {
