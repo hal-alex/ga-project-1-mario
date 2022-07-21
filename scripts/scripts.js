@@ -18,6 +18,8 @@ function init () {
 
     // this is Mario's starting position
     let startingPosition = 31
+    // when Mario ends in this position, then he "wins" the game
+    let winningPosition = 80
 
     // we update Mario's position as he moves 
     let currentPosition = startingPosition
@@ -29,7 +31,8 @@ function init () {
     let divContainer = document.querySelector(".div-container")
 
     let marioClass = "mario"
-    let marioJump = "mario-jump"
+    let marioJump = "jump"
+    let marioLeft = "left"
     let amountOfLives = 4
     let score = 0
     let scoreSpan = document.getElementById("scorespan")
@@ -126,14 +129,16 @@ function init () {
     // This function makes Mario go down by one row until "ground" is below him 
     function marioGravity () {
         clearInterval(gravityInterval)
-        
+        document.body.classList.add("jump")
         gravityInterval = setInterval(() => {
             if (!arrayOfDivs[currentPosition + numOfRows].classList.contains("ground")) {
                 removeMario(currentPosition)
                 currentPosition += numOfRows
+
                 checkCollisionTop()
                 addMario(currentPosition)
             } else {
+                document.body.classList.remove("jump")
                 console.log("ground below")
                 checkCollisionTop()
                 clearInterval(gravityInterval)
@@ -144,7 +149,7 @@ function init () {
 
     // This function creates the grid full of divs, assigns classes to some divs that match the criteria of being in another array
     function createDivGrid() {
-        for (let i = 0; i <= numOfDivs; i++) {
+        for (let i = 0; i < numOfDivs; i++) {
             let div = document.createElement("div")
             div.id = i
             if (terrainDivs.includes(i)) {
@@ -164,6 +169,7 @@ function init () {
     // This function takes marioClass and assigns it to a div at a certain location
     function addMario (position) {
         arrayOfDivs[position].classList.add(marioClass)
+
     }
 
     // This deletes the div grid - used for testing purposes 
@@ -210,6 +216,7 @@ function init () {
             if (arrayOfDivs[currentPosition].classList.contains("goomba")) {
                 marioGetHit()
             }
+            document.body.classList.add(marioLeft)
             addMario(currentPosition)
             marioGravity ()
             checkCollisionTop() 
@@ -219,6 +226,7 @@ function init () {
             if (arrayOfDivs[currentPosition].classList.contains("goomba")) {
                 marioGetHit()
             }
+            document.body.classList.remove(marioLeft)
             addMario(currentPosition)
             marioGravity ()
             checkCollisionTop() 

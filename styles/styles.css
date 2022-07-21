@@ -8,10 +8,14 @@
     background-size: contain;
 }
 
-.mario-jump {
+.left .mario {
+    transform: scaleX(-1);
+}
+
+
+.jump .mario  {
     background-image: url("https://www.pngitem.com/pimgs/m/3-36696_mario-8-bit-jumping-hd-png-download.png");
-    background-repeat: no-repeat;
-    background-size: contain;
+
 }
 
 .ground {
@@ -52,15 +56,20 @@
     justify-content: center;
     display: flex;
     flex-wrap: wrap;
-    height: 600px;
-    width: 600px;
+    height: 800px;
+    width: 800px;
 
 }
 
-
 .div-container div{
-    border: 1px solid grey;
+    border: 0.5px solid white;
     height: 10%;
     width: 10%;
+  }
+
+  .winning-block {
+    background-image: url("../assets/coin_spinning.webp");
+    background-repeat: no-repeat;
+    background-position: center;
   }
 
