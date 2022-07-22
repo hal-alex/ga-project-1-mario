@@ -9,7 +9,7 @@ body {
 }
 
 .mario {
-    background-image: url("https://i.pinimg.com/originals/bb/7f/fb/bb7ffbba483facaac98d15d1da923de8.png");
+    background-image: url("../assets/mario.png");
     background-repeat: no-repeat;
     background-size: contain;
 }
