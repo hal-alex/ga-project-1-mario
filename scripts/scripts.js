@@ -4,14 +4,12 @@ function init () {
     // Start button - link the functions to the start button so everything starts working when start is licked
     // Restart button - link it to the functions and reset the variables to default values
     // Sound 
-    // Start theme music when the start button is clicked
-    // Add "lost a life" clip when he loses a life 
-    // Add winning music when the game is over
     // Restart button - theme music restarts 
-    // Download all the images to local  
     // When game ends, bring up a popup and offer the user to try again 
 
     //Elements
+
+    let gameRunning = false
 
     //Rows and number of divs - map size can be changed by changing the numOfRows
     let numOfRows = 15
@@ -36,6 +34,8 @@ function init () {
     let currentPosition = startingPosition
 
     let startButton = document.querySelector(".startbutton")
+
+    let restartButton = document.querySelector(".restartgame")
     
     let divContainer = document.querySelector(".div-container")
 
@@ -52,6 +52,7 @@ function init () {
 
     // This makes the gravityInterval variable global and can be reassigned when the interval is initiated
     let gravityInterval
+    let goombaInterval
 
     //This 
     let winningBlock = "winning-block"
@@ -62,12 +63,12 @@ function init () {
     let endgameSound = document.querySelector(".endgame")
     let bumpSound = document.querySelector(".bump")
     let themeMusic = document.querySelector(".theme-music")
+    let winningSound = document.querySelector(".winninggame")
 
     //Execution
 
     // This function generates the Goombas in the initial position (taken from goombaLocations)
     function generateGoombas () {
-        
         for (let i in arrayOfDivs) {
             if (goombaLocations.includes(parseFloat(arrayOfDivs[i].id)))
             arrayOfDivs[i].classList.add("goomba")
@@ -76,7 +77,9 @@ function init () {
 
     // This function generates -1 or 1 to give Goombas horizontal movement 
     function generateRandomMovements() {
-        return Math.random() < 0.5 ? -1 : 1
+        if (gameRunning) {
+            return Math.random() < 0.5 ? -1 : 1
+        }
     }
 
     // This function checks for the amount of lives left, if lives are 0, then game is over
@@ -84,40 +87,42 @@ function init () {
         removeMario(currentPosition)
         currentPosition = startingPosition
         addMario(startingPosition)
-        if (amountOfLives == 0) {
+        amountOfLives -= 1
+        livesSpan.innerHTML = "❤️".repeat(amountOfLives)
+
+        if (amountOfLives === 0) {
             console.log("game over")
+            gameRunning = false
             endgameSound.play()
             themeMusic.pause()
-        } else if (amountOfLives > 0) {
-            amountOfLives -= 1
-            console.log("Lives left =", amountOfLives)
-            livesSpan.innerHTML = "❤️".repeat(amountOfLives)
-
-        }
+        } 
     }
 
     // This function loops through all the goombas, assigns them random movement points and checks if another Goomba class is in that div. It also checks if Mario is in that div, if so, it removes a life 
     function moveEnemies() {
-        setInterval(() => {
-            let goombaArray = document.querySelectorAll(".goomba")
-            let randomNumber = generateRandomMovements()
-            for (let i = 0; i < goombaArray.length; i++) {
-                let updatedLocation = parseInt(goombaArray[i].id) + randomNumber
-                if (arrayOfDivs[updatedLocation + numOfRows].classList.contains("ground")) {
-                    if (!arrayOfDivs[updatedLocation +1 ].classList.contains("goomba") 
-                    || !arrayOfDivs[updatedLocation - 1].classList.contains("goomba")
-                    // || !arrayOfDivs[updatedLocation - 1].classList.contains(winningBlock)
-                    ) {
-                        if (arrayOfDivs[updatedLocation].classList.contains("mario")) {
-                            console.log("hit")
-                            marioGetHit()
+        if (gameRunning) {
+            let goombaInterval = setInterval(() => {
+                let goombaArray = document.querySelectorAll(".goomba")
+                let randomNumber = generateRandomMovements()
+                for (let i = 0; i < goombaArray.length; i++) {
+                    let updatedLocation = parseInt(goombaArray[i].id) + randomNumber
+                    if (arrayOfDivs[updatedLocation + numOfRows].classList.contains("ground")) {
+                        if (!arrayOfDivs[updatedLocation +1 ].classList.contains("goomba") 
+                        || !arrayOfDivs[updatedLocation - 1].classList.contains("goomba")
+                        // || !arrayOfDivs[updatedLocation - 1].classList.contains(winningBlock)
+                        ) {
+                            if (arrayOfDivs[updatedLocation].classList.contains("mario")) {
+                                console.log("hit")
+                                marioGetHit()
+                            }
+                            goombaArray[i].classList.remove("goomba")
+                            arrayOfDivs[updatedLocation].classList.add("goomba")
                         }
-                        goombaArray[i].classList.remove("goomba")
-                        arrayOfDivs[updatedLocation].classList.add("goomba")
                     }
                 }
-            }
-        }, 2000)
+            }, 2000)
+        }
+        clearInterval(goombaInterval)
     }
 
     // This function checks if Mario is on top of a Goomba 
@@ -207,83 +212,100 @@ function init () {
     // This function checks if Mario is at the winning block 
     function checkWinningBlock () {
         if (arrayOfDivs[currentPosition].classList.contains(winningBlock)) {
-            console.log("you win")
+            themeMusic.pause()
+            winningSound.play()
+            gameRunning = false
+            moveEnemies()
         }
     }
 
     // This function removes marioClass from a div at a specific location
     function removeMario(position){
         arrayOfDivs[position].classList.remove(marioClass)
+
+        // if (checkWinningBlock ()) {
+        //     break
+        // }
       }
 
     // This function controls the movement of Mario 
     function marioMovement(event) {
-    // Save the keys for each direction
-        const keyCode = event.keyCode
-        const up = 38
-        const down = 40
-        const left = 37
-        const right = 39
+        if (gameRunning) {
+            // Save the keys for each direction
+            const keyCode = event.keyCode
+            const up = 38
+            const down = 40
+            const left = 37
+            const right = 39
 
-        removeMario(currentPosition)
+            removeMario(currentPosition)
 
-        // Check the keyCode on the event and match with the direction
-        if(up === keyCode && currentPosition >= numOfRows &&
-            !document.getElementById(`${currentPosition - numOfRows}`).classList.contains("ground")) {
-            console.log("ARROW UP")
-            currentPosition -= numOfRows
-            addMario(currentPosition)
-            marioGravity()
-            checkCollisionTop() 
-            jumpSound.play()
-            // addMario(currentPosition, marioJump)
-            
-        } else if (down === keyCode && 
-            !document.getElementById(`${currentPosition + numOfRows}`).classList.contains("ground")){
-            console.log("ARROW DOWN")
-            currentPosition += numOfRows
-            marioGravity ()
-            addMario(currentPosition)
-            checkCollisionTop() 
+            // Check the keyCode on the event and match with the direction
+            if(up === keyCode && currentPosition >= numOfRows &&
+                !document.getElementById(`${currentPosition - numOfRows}`).classList.contains("ground")) {
+                console.log("ARROW UP")
+                currentPosition -= numOfRows
+                addMario(currentPosition)
+                marioGravity()
+                checkCollisionTop() 
+                jumpSound.play()
+                // addMario(currentPosition, marioJump)
                 
-        } else if (left === keyCode && currentPosition % numOfRows !== 0 && !document.getElementById(`${currentPosition - 1}`).classList.contains("ground")){
-            console.log("ARROW LEFT")
-            currentPosition -= 1
-            if (arrayOfDivs[currentPosition].classList.contains("goomba")) {
-                marioGetHit()
+            } else if (down === keyCode && 
+                !document.getElementById(`${currentPosition + numOfRows}`).classList.contains("ground")){
+                console.log("ARROW DOWN")
+                currentPosition += numOfRows
+                marioGravity ()
+                addMario(currentPosition)
+                checkCollisionTop() 
+                    
+            } else if (left === keyCode && currentPosition % numOfRows !== 0 && !document.getElementById(`${currentPosition - 1}`).classList.contains("ground")){
+                console.log("ARROW LEFT")
+                currentPosition -= 1
+                if (arrayOfDivs[currentPosition].classList.contains("goomba")) {
+                    marioGetHit()
+                }
+                document.body.classList.add(marioLeft)
+                addMario(currentPosition)
+                marioGravity ()
+                checkCollisionTop() 
+            } else if (right === keyCode && currentPosition % numOfRows !== numOfRows - 1 && !document.getElementById(`${currentPosition + 1}`).classList.contains("ground")){
+                console.log("ARROW RIGHT")
+                currentPosition += 1
+                if (arrayOfDivs[currentPosition].classList.contains("goomba")) {
+                    marioGetHit()
+                }
+                document.body.classList.remove(marioLeft)
+                addMario(currentPosition)
+                marioGravity ()
+                checkCollisionTop() 
+            } else {
+                console.log("ACTION NOT FOUND")
+                addMario(currentPosition)
             }
-            document.body.classList.add(marioLeft)
-            addMario(currentPosition)
-            marioGravity ()
-            checkCollisionTop() 
-        } else if (right === keyCode && currentPosition % numOfRows !== numOfRows - 1 && !document.getElementById(`${currentPosition + 1}`).classList.contains("ground")){
-            console.log("ARROW RIGHT")
-            currentPosition += 1
-            if (arrayOfDivs[currentPosition].classList.contains("goomba")) {
-                marioGetHit()
-            }
-            document.body.classList.remove(marioLeft)
-            addMario(currentPosition)
-            marioGravity ()
-            checkCollisionTop() 
-        } else {
-            console.log("ACTION NOT FOUND")
-            addMario(currentPosition)
-        }
-        scorePoints ()
-        checkWinningBlock ()
+            scorePoints ()
+            checkWinningBlock ()
+                }
+    }
+
+    function restartGame() {
+
     }
 
 
     //Events
 
     function startGame() {
+        gameRunning = true
         document.addEventListener("keydown", marioMovement)
         moveEnemies()
         generateGoombas()
         themeMusic.play()
     }
     startButton.addEventListener("click", startGame)
+
+    restartButton.addEventListener("click", restartGame)
+
     createDivGrid()
 }
 

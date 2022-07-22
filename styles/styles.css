@@ -14,10 +14,10 @@ body {
     background-size: contain;
 }
 
-/* header {
-    display: flex;
-    flex-wrap: wrap;
-} */
+header {
+    max-width: 350px;
+    margin-right: 40px;
+}
 
 .left .mario {
     transform: scaleX(-1);
@@ -25,7 +25,7 @@ body {
 
 
 .jump .mario  {
-    background-image: url("https://www.pngitem.com/pimgs/m/3-36696_mario-8-bit-jumping-hd-png-download.png");
+    background-image: url("../assets/jumping.png");
 
 }
 
@@ -73,7 +73,7 @@ body {
 }
 
 .div-container div{
-    border: 0.5px solid gray;
+    /* border: 0.5px solid gray; */
     height: 53px;
     width: 53px;
   }
