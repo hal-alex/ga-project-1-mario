@@ -14,6 +14,11 @@ body {
     background-size: contain;
 }
 
+/* header {
+    display: flex;
+    flex-wrap: wrap;
+} */
+
 .left .mario {
     transform: scaleX(-1);
 }
@@ -31,8 +36,7 @@ body {
 }
 
 .goomba {
-    background-image: url("https://toppng.com/uploads/preview/oomba-8-bit-goomba-11562923680chnjskwjpc.png");
-    /* background-image: url("https://static.wikia.nocookie.net/stabyourself/images/7/71/Anigoomba.gif/revision/latest/top-crop/width/360/height/360?cb=20150107031425"); */
+    background-image: url("../assets/moving_goomba.gif");
     background-repeat: no-repeat;
     background-size: contain;
 }

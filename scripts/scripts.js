@@ -3,19 +3,11 @@ function init () {
     // To do list
     // Start button - link the functions to the start button so everything starts working when start is licked
     // Restart button - link it to the functions and reset the variables to default values
-    // Map 
-    // Controls 
-    // Arrow left - prevent Mario going off the edge of the map
-    // Arrow right - prevent Mario going off the edge of the map
-    // Arrow up - prevent Mario going off the top of the map or into the ground blocks
     // Sound 
     // Start theme music when the start button is clicked
-    // Add jumping music when jump is pressed
-    // Add points music when a point is scored
     // Add "lost a life" clip when he loses a life 
     // Add winning music when the game is over
     // Restart button - theme music restarts 
-    // Goombas - replace them with animations
     // Download all the images to local  
     // When game ends, bring up a popup and offer the user to try again 
 
@@ -56,13 +48,21 @@ function init () {
     let score = 0
     let scoreSpan = document.getElementById("score-span")
     // Array containing starting positions of Goombas (enemies) 
-    let goombaLocations = [52, 49, 125, 129, 133, 197, 200, 203, 206   ]
+    let goombaLocations = [52, 49, 125, 129, 133, 197, 200, 203, 206]
 
     // This makes the gravityInterval variable global and can be reassigned when the interval is initiated
     let gravityInterval
 
     //This 
     let winningBlock = "winning-block"
+
+    // Sounds
+    let jumpSound = document.querySelector(".jump")
+    let coinSound = document.querySelector(".coin")
+    let endgameSound = document.querySelector(".endgame")
+    let bumpSound = document.querySelector(".bump")
+    let themeMusic = document.querySelector(".theme-music")
+
     //Execution
 
     // This function generates the Goombas in the initial position (taken from goombaLocations)
@@ -84,11 +84,15 @@ function init () {
         removeMario(currentPosition)
         currentPosition = startingPosition
         addMario(startingPosition)
-        if (amountOfLives === 0) {
+        if (amountOfLives == 0) {
             console.log("game over")
+            endgameSound.play()
+            themeMusic.pause()
         } else if (amountOfLives > 0) {
             amountOfLives -= 1
+            console.log("Lives left =", amountOfLives)
             livesSpan.innerHTML = "❤️".repeat(amountOfLives)
+
         }
     }
 
@@ -122,6 +126,7 @@ function init () {
         for (let e in goombaArray2) {
             if (parseInt(goombaArray2[e].id) - numOfRows  === currentPosition) {
                 arrayOfDivs[goombaArray2[e].id].classList.remove("goomba")
+                bumpSound.play()
                 score += 200
                 scoreSpan.innerHTML = score
             }
@@ -131,9 +136,11 @@ function init () {
     // This function loops through the points blocks and checks if Mario has hit them 
     function scorePoints () {
         let pointsArray = Array.from(document.querySelectorAll(".points-block")) 
+
         for (let i in pointsArray) {
             if (parseInt(pointsArray[i].id) === currentPosition) {
                 console.log("block hit")
+                coinSound.play()
                 console.log(arrayOfDivs[pointsArray[i].id].classList)
 
                 setTimeout(() => {
@@ -228,6 +235,7 @@ function init () {
             addMario(currentPosition)
             marioGravity()
             checkCollisionTop() 
+            jumpSound.play()
             // addMario(currentPosition, marioJump)
             
         } else if (down === keyCode && 
@@ -269,14 +277,14 @@ function init () {
 
     //Events
 
+    function startGame() {
+        document.addEventListener("keydown", marioMovement)
+        moveEnemies()
+        generateGoombas()
+        themeMusic.play()
+    }
+    startButton.addEventListener("click", startGame)
     createDivGrid()
-
-    document.addEventListener("keydown", marioMovement)
-
-    moveEnemies()
-
-    generateGoombas()
-
 }
 
 window.addEventListener('DOMContentLoaded', init)
