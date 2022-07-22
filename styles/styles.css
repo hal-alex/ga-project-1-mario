@@ -74,9 +74,11 @@ body {
     width: 53px;
   }
 
-  .winning-block {
-    background-image: url("../assets/coin_spinning.webp");
+.winning-block {
+    background-image: url("../assets/winning.png");
     background-repeat: no-repeat;
     background-position: center;
+    background-size: 100%
   }
+  
 
