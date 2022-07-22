@@ -304,6 +304,10 @@ function init () {
     }
     startButton.addEventListener("click", startGame)
 
+    function restartGame () {
+       location.reload()
+    }
+
     restartButton.addEventListener("click", restartGame)
 
     createDivGrid()
